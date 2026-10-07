@@ -12,31 +12,34 @@
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #f5f7f4;
-      --paper: #ffffff;
-      --ink: #17211d;
-      --muted: #5d6a64;
-      --line: #d7ded9;
-      --soft: #eaf0ec;
-      --accent: #256b50;
+      --bg: #f7f5f0;
+      --paper: #fffefa;
+      --ink: #24302a;
+      --muted: #6f7973;
+      --line: #e3ded3;
+      --soft: #f0ede5;
+      --accent: #597967;
+      --accent-soft: #e3ece6;
       --accent-ink: #ffffff;
-      --danger: #a23834;
-      --shadow: 0 12px 36px rgba(31, 49, 40, .11);
-      --r-sm: 8px;
-      --r: 14px;
+      --danger: #a1514c;
+      --shadow: 0 10px 30px rgba(51, 59, 54, .08);
+      --r-sm: 10px;
+      --r: 17px;
+      --nav-h: 74px;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #121815;
-        --paper: #1b2420;
-        --ink: #f1f5f2;
-        --muted: #b4c0ba;
-        --line: #36433d;
-        --soft: #26322d;
-        --accent: #6bc39a;
-        --accent-ink: #102119;
-        --danger: #f08b85;
-        --shadow: 0 14px 38px rgba(0,0,0,.28);
+        --bg: #151816;
+        --paper: #202521;
+        --ink: #f2f0e9;
+        --muted: #b9beb9;
+        --line: #393e39;
+        --soft: #292f2a;
+        --accent: #8bb39c;
+        --accent-soft: #2b3b32;
+        --accent-ink: #132019;
+        --danger: #ef9791;
+        --shadow: 0 14px 34px rgba(0,0,0,.28);
       }
     }
     * { box-sizing: border-box; }
@@ -45,8 +48,8 @@
     button, input, select, textarea { font: inherit; color: inherit; }
     button { cursor: pointer; }
     a { color: var(--accent); }
-    .shell { max-width: 1180px; margin: 0 auto; padding: 22px clamp(14px, 3vw, 34px) 64px; }
-    .topline { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 20px clamp(14px, 3vw, 32px) calc(var(--nav-h) + 36px); }
+    .topline { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 24px; }
     .student-switch { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; overflow: hidden; font-weight: 700; flex: 0 0 auto; }
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -58,34 +61,37 @@
     .danger-btn { color: var(--danger); }
     button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 34%, transparent); outline-offset: 2px; }
     button:disabled { opacity: .48; cursor: not-allowed; }
-    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 28px; overflow-x: auto; scrollbar-width: none; }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tab { white-space: nowrap; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); padding: 12px 13px 10px; font-weight: 700; }
-    .tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+    .tabs { position: fixed; z-index: 30; left: 50%; bottom: max(10px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(720px, calc(100% - 20px)); display: grid; grid-template-columns: repeat(var(--tab-count, 5), minmax(0, 1fr)); gap: 3px; padding: 6px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); box-shadow: var(--shadow); }
+    .tab { min-width: 0; min-height: 56px; border: 0; border-radius: 12px; background: transparent; color: var(--muted); padding: 6px 3px; display: grid; place-items: center; align-content: center; gap: 2px; font-weight: 700; font-size: .72rem; line-height: 1.05; }
+    .tab svg { width: 19px; height: 19px; }
+    .tab.active { color: var(--accent); background: var(--accent-soft); }
     .page { display: none; }
     .page.active { display: block; }
-    .page-head { display: flex; justify-content: space-between; gap: 18px; align-items: end; margin-bottom: 22px; }
+    .page-head { display: flex; justify-content: space-between; gap: 18px; align-items: center; margin-bottom: 20px; }
     h1, h2, h3, p { margin-top: 0; }
-    h1 { font-size: clamp(1.75rem, 5vw, 3rem); line-height: 1.03; letter-spacing: -.035em; margin-bottom: 7px; }
-    h2 { font-size: 1.28rem; margin-bottom: 12px; }
-    h3 { font-size: 1.04rem; margin-bottom: 5px; }
+    h1 { font-size: clamp(1.38rem, 4vw, 1.72rem); line-height: 1.1; letter-spacing: -.02em; margin-bottom: 5px; }
+    h2 { font-size: 1.16rem; margin-bottom: 11px; }
+    h3 { font-size: 1.01rem; margin-bottom: 5px; }
     .muted { color: var(--muted); }
     .mono { font-family: "DM Mono", monospace; font-size: .84rem; }
     .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
     .span-8 { grid-column: span 8; }
     .span-4 { grid-column: span 4; }
     .span-12 { grid-column: 1 / -1; }
-    .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: clamp(16px, 3vw, 24px); }
-    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); border-radius: var(--r); overflow: hidden; }
-    .stat { background: var(--paper); padding: 17px; }
+    .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: clamp(16px, 3vw, 23px); box-shadow: 0 2px 10px rgba(45,54,48,.025); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .stat { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
     .stat strong { display: block; font-family: "DM Mono", monospace; font-size: 1.45rem; }
     .section-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 26px 0 12px; }
     .section-bar h2 { margin: 0; }
     .curriculum-list { display: grid; gap: 12px; }
-    .course { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
-    .course-head { width: 100%; border: 0; background: transparent; text-align: left; padding: 17px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
-    .course-meta { display: flex; flex-wrap: wrap; gap: 7px 12px; color: var(--muted); font-size: .9rem; }
-    .progress-track { height: 6px; background: var(--soft); border-radius: 10px; margin-top: 10px; overflow: hidden; }
+    .course { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; box-shadow: 0 2px 10px rgba(45,54,48,.025); }
+    .course-head { width: 100%; border: 0; background: transparent; text-align: left; padding: 17px 18px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
+    .course-title-row { display: flex; align-items: center; gap: 9px; margin-bottom: 3px; }
+    .subject-mark { width: 9px; height: 28px; border-radius: 8px; background: var(--accent); flex: 0 0 auto; }
+    .course-meta { display: flex; flex-wrap: wrap; gap: 6px 9px; color: var(--muted); font-size: .86rem; }
+    .meta-chip { padding: 2px 7px; border-radius: 99px; background: var(--soft); }
+    .progress-track { height: 7px; background: var(--soft); border-radius: 10px; margin-top: 11px; overflow: hidden; }
     .progress-track span { display: block; height: 100%; background: var(--accent); }
     .course-body { border-top: 1px solid var(--line); padding: 8px 17px 17px; }
     .chapter { border-bottom: 1px solid var(--line); padding: 13px 0; }
@@ -95,9 +101,17 @@
     .check { display: flex; align-items: center; gap: 9px; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; background: var(--bg); }
     .check input { width: 18px; height: 18px; accent-color: var(--accent); }
     .empty { border: 1px dashed var(--line); border-radius: var(--r); padding: 28px; color: var(--muted); text-align: center; }
-    .schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
-    .day-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
-    .day-card textarea { min-height: 116px; }
+    .pacing-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-bottom: 22px; }
+    .pace-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 15px; }
+    .pace-card-top { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+    .pace-number { font: 500 .76rem/1 "DM Mono", monospace; background: var(--accent-soft); color: var(--accent); border-radius: 99px; padding: 6px 8px; white-space: nowrap; }
+    .pace-detail { margin: 9px 0 0; color: var(--muted); font-size: .86rem; }
+    .schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 11px; }
+    .day-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+    .day-title { padding: 12px 14px; background: var(--accent-soft); border-bottom: 1px solid var(--line); }
+    .day-title input { border: 0; background: transparent; padding: 0; font-weight: 700; }
+    .day-plan { padding: 13px 14px 15px; }
+    .day-card textarea { min-height: 126px; border: 0; background: transparent; padding: 0; }
     label { display: grid; gap: 6px; font-weight: 700; }
     input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper); padding: 10px 11px; }
     textarea { resize: vertical; min-height: 90px; }
@@ -110,9 +124,14 @@
     .toggle:checked { background: var(--accent); }
     .toggle:checked::before { transform: translateX(20px); }
     .calendar-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+    .paint-panel { position: sticky; top: 8px; z-index: 12; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; margin-bottom: 16px; box-shadow: var(--shadow); }
+    .paint-panel strong { display: block; margin-bottom: 8px; font-size: .91rem; }
+    .paint-tools { display: flex; flex-wrap: wrap; gap: 7px; }
+    .paint-tool { min-height: 36px; border: 1px solid var(--line); background: var(--paper); border-radius: 99px; padding: 7px 10px; display: flex; align-items: center; gap: 6px; font-size: .83rem; font-weight: 700; }
+    .paint-tool.active { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
     .legend { display: flex; flex-wrap: wrap; gap: 7px 13px; margin: 13px 0 20px; }
     .legend span { display: flex; align-items: center; gap: 6px; font-size: .84rem; color: var(--muted); }
-    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
     .year-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
     .month { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 13px; }
     .month h3 { margin-bottom: 10px; }
@@ -132,16 +151,22 @@
     .modal-head { display: flex; justify-content: space-between; gap: 14px; align-items: start; margin-bottom: 20px; }
     .modal-head h2 { font-size: 1.55rem; margin-bottom: 3px; }
     .modal-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
-    .wizard-progress { display: flex; gap: 6px; margin-bottom: 26px; }
-    .wizard-progress span { height: 5px; flex: 1; border-radius: 5px; background: var(--line); }
+    #wizardWrap { background: var(--bg); }
+    #wizardWrap .modal { width: min(780px, 100%); border-radius: 24px; border: 1px solid var(--line); box-shadow: 0 22px 64px rgba(38,48,42,.14); }
+    #wizardWrap .modal-head { padding-bottom: 16px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+    #wizardWrap .modal-head h2 { font-size: 1.45rem; }
+    .wizard-progress { display: flex; gap: 8px; margin-bottom: 24px; }
+    .wizard-progress span { height: 7px; flex: 1; border-radius: 5px; background: var(--soft); }
     .wizard-progress span.on { background: var(--accent); }
-    .child-editor { border: 1px solid var(--line); border-radius: var(--r); padding: 14px; margin-bottom: 11px; }
+    .child-editor { background: var(--soft); border: 0; border-radius: var(--r); padding: 16px; margin-bottom: 12px; }
     .child-editor-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .catalog-filters { display: grid; grid-template-columns: 1fr 220px; gap: 10px; margin-bottom: 15px; }
     .publisher { margin-top: 22px; }
     .publisher h3 { border-bottom: 1px solid var(--line); padding-bottom: 7px; }
     .preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-    .preset { border: 1px solid var(--line); border-radius: var(--r-sm); padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .preset { border: 1px solid var(--line); border-radius: var(--r); padding: 13px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; background: var(--paper); }
+    .preset strong { display: block; }
+    .preset-meta { display: flex; flex-wrap: wrap; gap: 5px 9px; color: var(--muted); font-size: .8rem; margin-top: 4px; }
     .preset button { min-height: 36px; }
     .subtabs { display: flex; gap: 8px; margin: 4px 0 18px; }
     .subtab { border: 1px solid var(--line); background: var(--paper); border-radius: 99px; padding: 8px 13px; font-weight: 700; }
@@ -159,18 +184,23 @@
       .page-head { align-items: start; flex-direction: column; }
     }
     @media (max-width: 590px) {
-      .shell { padding-top: 14px; }
+      .shell { padding-top: 14px; padding-inline: 12px; }
       .top-actions .text-label { display: none; }
-      .tabs { margin-left: -14px; margin-right: -14px; padding: 0 10px; }
-      .tab { padding-inline: 10px; }
-      .stat-row { grid-template-columns: 1fr; }
+      .tabs { width: calc(100% - 12px); bottom: max(6px, env(safe-area-inset-bottom)); border-radius: 16px; }
+      .tab { font-size: .64rem; min-height: 55px; }
+      .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .stat { padding: 11px 8px; }
+      .stat strong { font-size: 1.18rem; }
       .field-grid, .catalog-filters, .preset-grid { grid-template-columns: 1fr; }
       .year-grid { grid-template-columns: 1fr; }
       .record { grid-template-columns: 1fr auto; }
       .record .date { grid-column: 1 / -1; }
       .calendar-toolbar { align-items: stretch; flex-direction: column; }
+      .page-head { align-items: stretch; }
+      .page-head .primary-btn { width: 100%; }
       .modal-wrap { padding: 0; align-items: end; }
       .modal { border-radius: 18px 18px 0 0; max-height: 94vh; }
+      .paint-panel { top: 4px; }
     }
     @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
   </style>
@@ -231,18 +261,42 @@
     "5A":["Whole Numbers","Writing and Evaluating Expressions","Multiplication and Division","Addition and Subtraction of Fractions","Multiplication of Fractions","Division of Fractions","Measurement","Volume of Solid Figures"],
     "5B":["Decimals","The Four Operations of Decimals","Geometry","Data Analysis and Graphs","Ratio","Rate","Percentage"]
   };
+  function rangeChapters(start,total,size,label){var out=[],end=start+total-1,part=1;for(var a=start;a<=end;a+=size){var b=Math.min(end,a+size-1),kind=label||"Lessons";out.push({name:(kind==="Lessons"?"Part ":kind+" group ")+part+" · "+kind+" "+a+"–"+b,count:b-a+1,start:a});part++;}return out;}
+  function namedChapters(names,total){var base=Math.floor(total/names.length),extra=total%names.length,n=1;return names.map(function(name,i){var count=base+(i<extra?1:0),x={name:name,count:count,start:n};n+=count;return x;});}
+  function themedChapters(names,total){return namedChapters(names.map(function(name){return "Editable estimate · "+name;}),total);}
+  function preset(p,n,chapters,minutes,pace,estimate){return {p:p,n:n,chapters:chapters,minutes:minutes,pace:pace,estimate:!!estimate};}
+  var LOE_PARTS=["Phonograms and blending","Reading and spelling patterns","Fluency and comprehension","Composition and mastery"];
+  var READING_PARTS=["Phonological awareness","Phonics and decoding","Fluency practice","Vocabulary and comprehension","Review and mastery"];
+  var SPELLING_PARTS=["Phonograms and sound skills","Spelling patterns","Rules and word analysis","Dictation and review"];
   var PRESETS = [
-    {p:"Logic of English", n:"Foundations A"},{p:"Logic of English", n:"Foundations B"},{p:"Logic of English", n:"Foundations C"},{p:"Logic of English", n:"Foundations D"},{p:"Logic of English", n:"Essentials"},
-    {p:"All About Learning Press", n:"All About Reading Pre-Reading"},{p:"All About Learning Press", n:"All About Reading Level 1"},{p:"All About Learning Press", n:"All About Reading Level 2"},{p:"All About Learning Press", n:"All About Reading Level 3"},{p:"All About Learning Press", n:"All About Reading Level 4"},
-    {p:"All About Learning Press", n:"All About Spelling Level 1"},{p:"All About Learning Press", n:"All About Spelling Level 2"},{p:"All About Learning Press", n:"All About Spelling Level 3"},{p:"All About Learning Press", n:"All About Spelling Level 4"},{p:"All About Learning Press", n:"All About Spelling Level 5"},{p:"All About Learning Press", n:"All About Spelling Level 6"},{p:"All About Learning Press", n:"All About Spelling Level 7"},
-    {p:"The Good and the Beautiful", n:"Language Arts K"},{p:"The Good and the Beautiful", n:"Language Arts 1"},{p:"The Good and the Beautiful", n:"Language Arts 2"},{p:"The Good and the Beautiful", n:"Language Arts 3"},{p:"The Good and the Beautiful", n:"Language Arts 4"},{p:"The Good and the Beautiful", n:"Language Arts 5"},
-    {p:"The Good and the Beautiful", n:"Math K"},{p:"The Good and the Beautiful", n:"Math 1"},{p:"The Good and the Beautiful", n:"Math 2"},{p:"The Good and the Beautiful", n:"Math 3"},{p:"The Good and the Beautiful", n:"Math 4"},{p:"The Good and the Beautiful", n:"Math 5"},{p:"The Good and the Beautiful", n:"Handwriting K"},{p:"The Good and the Beautiful", n:"Handwriting 1"},{p:"The Good and the Beautiful", n:"Handwriting 2"},{p:"The Good and the Beautiful", n:"Handwriting 3"},{p:"The Good and the Beautiful", n:"Handwriting 4"},{p:"The Good and the Beautiful", n:"Handwriting 5"},{p:"The Good and the Beautiful", n:"Handwriting 6"},{p:"The Good and the Beautiful", n:"Handwriting 7"}
-  ].concat(Object.keys(SINGAPORE).map(function(level){ return {p:"Singapore Math", n:"Dimensions Math " + level, chapters:SINGAPORE[level]}; }));
+    preset("Logic of English","Foundations A",themedChapters(LOE_PARTS,40).concat([{name:"Review cycle · Reviews A–H",count:8,start:1,prefix:"Review "}]),30,3,true),
+    preset("Logic of English","Foundations B",themedChapters(LOE_PARTS,40).map(function(x){x.start+=40;return x;}).concat([{name:"Review cycle · Reviews A–H",count:8,start:1,prefix:"Review "}]),35,3,true),
+    preset("Logic of English","Foundations C",themedChapters(LOE_PARTS,40).map(function(x){x.start+=80;return x;}).concat([{name:"Review cycle · Reviews A–H",count:8,start:1,prefix:"Review "}]),40,3,true),
+    preset("Logic of English","Foundations D",themedChapters(LOE_PARTS,40).map(function(x){x.start+=120;return x;}).concat([{name:"Review cycle · Reviews A–H",count:8,start:1,prefix:"Review "}]),45,3,true),
+    preset("Logic of English","Essentials",themedChapters(["Foundations and phonograms","Spelling analysis","Grammar and vocabulary","Reading and composition","Mastery review"],30),45,3,true),
+    preset("All About Learning Press","All About Reading Pre-Reading",themedChapters(["Letter knowledge","Phonological awareness","Print awareness","Listening comprehension","Reading readiness"],78),20,4,true),
+    preset("All About Learning Press","All About Reading Level 1",themedChapters(READING_PARTS,53),20,4,true),
+    preset("All About Learning Press","All About Reading Level 2",themedChapters(READING_PARTS,57),25,4,true),
+    preset("All About Learning Press","All About Reading Level 3",themedChapters(READING_PARTS,54),30,4,true),
+    preset("All About Learning Press","All About Reading Level 4",themedChapters(READING_PARTS,63),35,4,true),
+    preset("All About Learning Press","All About Spelling Level 1",themedChapters(SPELLING_PARTS,24),20,4,true),
+    preset("All About Learning Press","All About Spelling Level 2",themedChapters(SPELLING_PARTS,25),20,4,true),
+    preset("All About Learning Press","All About Spelling Level 3",themedChapters(SPELLING_PARTS,28),25,4,true),
+    preset("All About Learning Press","All About Spelling Level 4",themedChapters(SPELLING_PARTS,25),25,4,true),
+    preset("All About Learning Press","All About Spelling Level 5",themedChapters(SPELLING_PARTS,25),25,4,true),
+    preset("All About Learning Press","All About Spelling Level 6",themedChapters(SPELLING_PARTS,26),30,4,true),
+    preset("All About Learning Press","All About Spelling Level 7",themedChapters(SPELLING_PARTS,30),30,4,true)
+  ];
+  ["K","1","2","3","4","5"].forEach(function(level){PRESETS.push(preset("The Good and the Beautiful","Language Arts "+level,themedChapters(["Phonics and reading","Grammar and usage","Spelling and vocabulary","Writing","Literature","Review"],120),level==="K"?20:30,4,true));});
+  ["K","1","2","3","4","5"].forEach(function(level){PRESETS.push(preset("The Good and the Beautiful","Math "+level,themedChapters(["Number sense","Operations","Fractions","Measurement","Geometry","Data and review"],120),level==="K"?20:30,4,true));});
+  ["K","1","2","3","4","5","6","7"].forEach(function(level){PRESETS.push(preset("The Good and the Beautiful","Handwriting "+level,themedChapters(["Strokes and forms","Lowercase","Uppercase","Words and sentences","Copywork and fluency"],100),15,4,true));});
+  Object.keys(SINGAPORE).forEach(function(level){var total=level==="KA"?59:(level==="PKA"||level==="PKB"?60:100);PRESETS.push(preset("Singapore Math","Dimensions Math "+level,namedChapters(SINGAPORE[level],total),level.charAt(0)==="P"?20:30,4,level!=="KA"));});
 
   var state = null;
   var activeChild = 0;
   var activeTab = "current";
   var addTarget = "current";
+  var selectedPaint = "school";
   var wizardStep = 1;
   var draftChildren = [{name:"", birthday:"", color:COLORS[0], photo:"", attendance:true, startMonth:8}];
   var draftYear = {days:5, pattern:"public", weeks:38};
@@ -256,6 +310,8 @@
   function attendanceCount(child) { return Object.keys(child.calendar || {}).filter(function(k){ var v=child.calendar[k]; return ["school","field","coop","half","testing","makeup"].indexOf(v)>-1; }).length; }
   function completedLessons(course) { var n=0; (course.chapters||[]).forEach(function(ch){ (ch.lessons||[]).forEach(function(l){ if(l.done)n++; }); }); return n; }
   function totalLessons(course) { var n=0; (course.chapters||[]).forEach(function(ch){ n+=(ch.lessons||[]).length; }); return n; }
+  function nextLesson(course){var found=null;(course.chapters||[]).some(function(ch){return (ch.lessons||[]).some(function(l){if(!l.done){found=l.name;return true;}return false;});});return found||"Complete";}
+  function tabIcon(id){var paths={current:'<path d="M4 5.5h16v14H4z"/><path d="M8 3.5v4M16 3.5v4M4 9.5h16"/>',schedule:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',planning:'<path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/>',records:'<path d="M6 3.5h9l3 3V20H6z"/><path d="M14.5 3.5V7H18M9 11h6M9 15h6"/>',calendar:'<path d="M4 5.5h16v14H4z"/><path d="M8 3.5v4M16 3.5v4M4 9.5h16M8 13h2M13 13h2M8 16h2"/>'};return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[id]+'</svg>';}
 
   function renderWizard() {
     var body=document.getElementById("wizardBody");
@@ -294,10 +350,10 @@
 
   function renderAll(){ applyAccent(); renderTop(); renderTabs(); renderCurrent(); renderSchedule(); renderPlanning(); renderRecords(); renderCalendar(); showTab(activeTab); }
   function renderTop(){ var c=currentChild(); var av=document.getElementById("avatar"); av.innerHTML=c.photo?'<img src="'+c.photo+'" alt="">':esc(c.name.charAt(0).toUpperCase()); var s=document.getElementById("studentSelect");s.innerHTML=state.children.map(function(x,i){return '<option value="'+i+'" '+(i===activeChild?'selected':'')+'>'+esc(x.name)+'</option>';}).join('');s.onchange=function(){activeChild=+s.value;renderAll();}; }
-  function renderTabs(){ var el=document.getElementById("tabs"); el.innerHTML=state.tabs.filter(function(t){return t.show;}).map(function(t){return '<button class="tab '+(t.id===activeTab?'active':'')+'" data-tab="'+t.id+'">'+TAB_NAMES[t.id]+'</button>';}).join(''); el.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){showTab(b.dataset.tab);};}); if(!state.tabs.some(function(t){return t.id===activeTab&&t.show;})){activeTab=state.tabs.filter(function(t){return t.show;})[0].id;}
+  function renderTabs(){ var el=document.getElementById("tabs"),shown=state.tabs.filter(function(t){return t.show;}); el.style.setProperty('--tab-count',shown.length);el.innerHTML=shown.map(function(t){return '<button class="tab '+(t.id===activeTab?'active':'')+'" data-tab="'+t.id+'">'+tabIcon(t.id)+'<span>'+TAB_NAMES[t.id]+'</span></button>';}).join(''); el.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){showTab(b.dataset.tab);};}); if(!state.tabs.some(function(t){return t.id===activeTab&&t.show;})){activeTab=shown[0].id;}
   }
   function showTab(id){ activeTab=id;document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+id);});document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===id);}); }
-  function courseHTML(course, listName){ var total=totalLessons(course),done=completedLessons(course),pct=total?Math.round(done/total*100):0; return '<article class="course" data-course="'+course.id+'" data-list="'+listName+'"><button class="course-head"><div><h3>'+esc(course.name)+'</h3><div class="course-meta"><span>'+esc(course.publisher||'Custom')+'</span><span>'+done+' of '+total+' lessons</span></div><div class="progress-track"><span style="width:'+pct+'%"></span></div></div><span aria-hidden="true">＋</span></button><div class="course-body" hidden>'+((course.chapters||[]).length?course.chapters.map(function(ch,ci){return '<div class="chapter"><div class="chapter-name"><span>'+esc(ch.name)+'</span><button class="quiet-btn add-lesson" data-ci="'+ci+'">Add lesson</button></div><div class="lesson-list">'+((ch.lessons||[]).length?ch.lessons.map(function(l,li){return '<label class="check"><input type="checkbox" data-ci="'+ci+'" data-li="'+li+'" '+(l.done?'checked':'')+'><span>'+esc(l.name)+'</span></label>';}).join(''):'<span class="muted">No lessons yet.</span>')+'</div></div>';}).join(''):'<p class="muted">Add chapters and lessons to begin.</p>')+'<div class="modal-actions"><button class="quiet-btn edit-course">Edit structure</button><button class="danger-btn remove-course">Remove</button></div></div></article>'; }
+  function courseHTML(course, listName){ var total=totalLessons(course),done=completedLessons(course),pct=total?Math.round(done/total*100):0,minutes=course.minutes||30,pace=course.pace||4; return '<article class="course" data-course="'+course.id+'" data-list="'+listName+'"><button class="course-head"><div><div class="course-title-row"><span class="subject-mark"></span><h3>'+esc(course.name)+'</h3></div><div class="course-meta"><span>'+esc(course.publisher||'Custom')+'</span><span class="meta-chip">'+done+' of '+total+' lessons</span><span class="meta-chip">'+minutes+' min</span><span class="meta-chip">'+pace+'/week</span></div><div class="progress-track"><span style="width:'+pct+'%"></span></div></div><span aria-hidden="true">＋</span></button><div class="course-body" hidden>'+((course.chapters||[]).length?course.chapters.map(function(ch,ci){return '<div class="chapter"><div class="chapter-name"><span>'+esc(ch.name)+'</span><span class="muted">'+(ch.lessons||[]).length+' lessons</span><button class="quiet-btn add-lesson" data-ci="'+ci+'">Add lesson</button></div><div class="lesson-list">'+((ch.lessons||[]).length?ch.lessons.map(function(l,li){return '<label class="check"><input type="checkbox" data-ci="'+ci+'" data-li="'+li+'" '+(l.done?'checked':'')+'><span>'+esc(l.name)+'</span></label>';}).join(''):'<span class="muted">No lessons yet.</span>')+'</div></div>';}).join(''):'<p class="muted">Add chapters and lessons to begin.</p>')+'<div class="modal-actions"><button class="quiet-btn edit-course">Edit details</button><button class="danger-btn remove-course">Remove</button></div></div></article>'; }
   function bindCourses(container){
     container.querySelectorAll('.course').forEach(function(card){
       var listName=card.dataset.list, course=currentChild()[listName].find(function(x){return x.id===card.dataset.course;});
@@ -311,9 +367,9 @@
   function renderCurrent(){ var c=currentChild(), totalCourses=c.current.length, completed=c.current.filter(function(x){var t=totalLessons(x);return t>0&&completedLessons(x)===t;}).length; var el=document.getElementById('page-current'); el.innerHTML='<div class="page-head"><div><h1>'+esc(c.name)+'’s Tracker</h1><p class="muted">Current curriculum and progress.</p></div><button class="primary-btn add-curriculum" data-target="current">Add curriculum</button></div><div class="stat-row"><div class="stat"><span class="muted">Curriculum</span><strong>'+totalCourses+'</strong></div><div class="stat"><span class="muted">Completed</span><strong>'+completed+'</strong></div><div class="stat"><span class="muted">Attendance days</span><strong>'+(c.attendance?attendanceCount(c):'—')+'</strong></div></div><div class="section-bar"><h2>Current year</h2></div><div class="curriculum-list">'+(c.current.length?c.current.map(function(x){return courseHTML(x,'current');}).join(''):'<div class="empty">No curriculum added.</div>')+'</div>'; bindCourses(el); el.querySelector('.add-curriculum').onclick=openCatalog;
   }
   function renderPlanning(){ var c=currentChild(),el=document.getElementById('page-planning');el.innerHTML='<div class="page-head"><div><h1>Planning</h1><p class="muted">Future curriculum and course outlines.</p></div><button class="primary-btn add-curriculum" data-target="planning">Add curriculum</button></div><div class="curriculum-list">'+(c.planning.length?c.planning.map(function(x){return courseHTML(x,'planning');}).join(''):'<div class="empty">No planned curriculum.</div>')+'</div>';bindCourses(el);el.querySelector('.add-curriculum').onclick=openCatalog; }
-  function renderSchedule(){ var c=currentChild(),el=document.getElementById('page-schedule');el.innerHTML='<div class="page-head"><div><h1>Schedule</h1><p class="muted">'+state.year.days+' days · '+state.year.weeks+' weeks</p></div></div><div class="schedule-grid">'+c.schedule.map(function(d,i){return '<div class="day-card"><label>Day name<input data-i="'+i+'" class="day-name" value="'+esc(d.name)+'"></label><label style="margin-top:11px">Plan<textarea data-i="'+i+'" class="day-notes" placeholder="Subjects, lesson pace, or time blocks">'+esc(d.notes)+'</textarea></label></div>';}).join('')+'</div>';el.querySelectorAll('.day-name').forEach(function(x){x.oninput=function(){c.schedule[+x.dataset.i].name=x.value;};});el.querySelectorAll('.day-notes').forEach(function(x){x.oninput=function(){c.schedule[+x.dataset.i].notes=x.value;};}); }
+  function renderSchedule(){ var c=currentChild(),el=document.getElementById('page-schedule'),courses=c.current;el.innerHTML='<div class="page-head"><div><h1>Schedule</h1><p class="muted">Weekly plan</p></div></div><div class="section-bar"><h2>Pacing</h2></div><div class="pacing-board">'+(courses.length?courses.map(function(course){var pace=course.pace||4,minutes=course.minutes||30;return '<div class="pace-card"><div class="pace-card-top"><div><h3>'+esc(course.name)+'</h3><span class="muted">Next: '+esc(nextLesson(course))+'</span></div><span class="pace-number">'+pace+' / week</span></div><p class="pace-detail">About '+(pace*minutes)+' minutes weekly · '+minutes+' minutes per lesson</p></div>';}).join(''):'<div class="empty span-12">Add current curriculum to see pacing.</div>')+'</div><div class="section-bar"><h2>Week</h2></div><div class="schedule-grid">'+c.schedule.map(function(d,i){return '<div class="day-card"><div class="day-title"><label class="sr-only" for="dayName'+i+'">Day name</label><input id="dayName'+i+'" data-i="'+i+'" class="day-name" value="'+esc(d.name)+'"></div><div class="day-plan"><label class="sr-only" for="dayPlan'+i+'">Plan</label><textarea id="dayPlan'+i+'" data-i="'+i+'" class="day-notes" placeholder="Add subjects, lesson numbers, or time blocks">'+esc(d.notes)+'</textarea></div></div>';}).join('')+'</div>';el.querySelectorAll('.day-name').forEach(function(x){x.oninput=function(){c.schedule[+x.dataset.i].name=x.value;};});el.querySelectorAll('.day-notes').forEach(function(x){x.oninput=function(){c.schedule[+x.dataset.i].notes=x.value;};}); }
   function renderRecords(){ var c=currentChild(), completed=[];c.current.concat(c.planning).forEach(function(x){var t=totalLessons(x);if(t&&completedLessons(x)===t)completed.push(x);});var marks=Object.keys(c.calendar).sort();var el=document.getElementById('page-records');el.innerHTML='<div class="page-head"><div><h1>Records</h1><p class="muted">History and backup.</p></div></div><div class="grid"><div class="panel span-8"><h2>Attendance</h2>'+(c.attendance?'<div class="stat"><span class="muted">Days counted</span><strong>'+attendanceCount(c)+'</strong></div><div class="record-list">'+(marks.length?marks.slice(-12).reverse().map(function(date){return '<div class="record"><span class="date mono">'+date+'</span><strong>'+esc(LABELS[c.calendar[date]].name)+'</strong><span class="dot" style="background:'+LABELS[c.calendar[date]].color+'"></span></div>';}).join(''):'<p class="muted">No calendar records.</p>')+'</div>':'<p class="muted">Attendance tracking is off for this child.</p>')+'</div><div class="panel span-4"><h2>Backup</h2><p class="muted">Download after making changes. Import the file to continue later.</p><button class="primary-btn" id="exportBtn" style="width:100%">Download backup</button><label class="quiet-btn" style="display:flex;justify-content:center;margin-top:9px;cursor:pointer">Import backup<input id="importBtn" type="file" accept="application/json,.json" hidden></label></div><div class="panel span-12"><h2>Completed curriculum</h2>'+(completed.length?completed.map(function(x){return '<div class="record"><span class="date mono">Complete</span><strong>'+esc(x.name)+'</strong><span>'+totalLessons(x)+' lessons</span></div>';}).join(''):'<p class="muted">No completed curriculum.</p>')+'</div></div>';document.getElementById('exportBtn').onclick=exportBackup;document.getElementById('importBtn').onchange=importBackup; }
-  function renderCalendar(){ var c=currentChild(), el=document.getElementById('page-calendar'); var startYear=(new Date()).getFullYear();var months=[];for(var i=0;i<12;i++){var m=(c.startMonth+i)%12,y=startYear+(c.startMonth+i>=12?1:0);months.push({m:m,y:y});} el.innerHTML='<div class="page-head"><div><h1>Calendar</h1><p class="muted">'+monthName(c.startMonth)+' '+startYear+' – '+monthName((c.startMonth+11)%12)+' '+(c.startMonth===0?startYear:startYear+1)+'</p></div>'+(c.attendance?'<button class="quiet-btn" id="markSchoolBtn">Mark school day</button>':'')+'</div><div class="legend">'+Object.keys(LABELS).map(function(k){return '<span><i class="dot" style="background:'+LABELS[k].color+'"></i>'+LABELS[k].name+'</span>';}).join('')+'</div><div class="year-grid">'+months.map(monthHTML).join('')+'</div>'; el.querySelectorAll('.day[data-date]').forEach(function(b){b.onclick=function(){openDayLabel(b.dataset.date);};});var ms=document.getElementById('markSchoolBtn');if(ms)ms.onclick=function(){toast('Select a date, then choose School');}; }
+  function renderCalendar(){ var c=currentChild(), el=document.getElementById('page-calendar'); var startYear=(new Date()).getFullYear();var months=[];for(var i=0;i<12;i++){var m=(c.startMonth+i)%12,y=startYear+(c.startMonth+i>=12?1:0);months.push({m:m,y:y});} el.innerHTML='<div class="page-head"><div><h1>Calendar</h1><p class="muted">'+monthName(c.startMonth)+' '+startYear+' – '+monthName((c.startMonth+11)%12)+' '+(c.startMonth===0?startYear:startYear+1)+'</p></div></div><div class="paint-panel"><strong>Choose a label, then tap days</strong><div class="paint-tools">'+Object.keys(LABELS).map(function(k){return '<button class="paint-tool '+(selectedPaint===k?'active':'')+'" data-paint="'+k+'" aria-pressed="'+(selectedPaint===k)+'"><i class="dot" style="background:'+LABELS[k].color+'"></i>'+LABELS[k].name+'</button>';}).join('')+'<button class="paint-tool '+(selectedPaint==='clear'?'active':'')+'" data-paint="clear" aria-pressed="'+(selectedPaint==='clear')+'">Clear mark</button></div></div><div class="year-grid">'+months.map(monthHTML).join('')+'</div>';el.querySelectorAll('.paint-tool').forEach(function(b){b.onclick=function(){selectedPaint=b.dataset.paint;renderCalendar();};});el.querySelectorAll('.day[data-date]').forEach(function(b){b.onclick=function(){if(selectedPaint==='clear')delete c.calendar[b.dataset.date];else c.calendar[b.dataset.date]=selectedPaint;renderCalendar();};}); }
   function monthHTML(x){ var c=currentChild(),first=new Date(x.y,x.m,1).getDay(),count=new Date(x.y,x.m+1,0).getDate(),cells='';for(var i=0;i<first;i++)cells+='<span class="day blank"></span>';for(var d=1;d<=count;d++){var key=x.y+'-'+String(x.m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),mark=c.calendar[key],style=mark?'background:'+LABELS[mark].color+';':'';cells+='<button class="day '+(mark?'has-mark':'')+'" data-date="'+key+'" style="'+style+'" title="'+(mark?LABELS[mark].name:'Unmarked')+'">'+d+'</button>';}return '<section class="month"><h3>'+monthName(x.m)+' <span class="muted mono">'+x.y+'</span></h3><div class="weekdays"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="days">'+cells+'</div></section>'; }
 
   function openModal(html,wide){var w=document.getElementById('genericWrap'),m=document.getElementById('genericModal');m.classList.toggle('wide',!!wide);m.innerHTML=html;w.classList.add('open');}
@@ -321,12 +377,13 @@
   function openDayLabel(date){openModal('<div class="modal-head"><div><h2>'+date+'</h2><p class="muted">Choose a label.</p></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><div class="preset-grid">'+Object.keys(LABELS).map(function(k){return '<button class="preset day-label" data-label="'+k+'"><span><i class="dot" style="display:inline-block;background:'+LABELS[k].color+';margin-right:8px"></i>'+LABELS[k].name+'</span></button>';}).join('')+'</div><div class="modal-actions"><button class="danger-btn" id="clearDay">Clear</button></div>');document.querySelector('.close-modal').onclick=closeModal;document.querySelectorAll('.day-label').forEach(function(b){b.onclick=function(){currentChild().calendar[date]=b.dataset.label;closeModal();renderAll();};});document.getElementById('clearDay').onclick=function(){delete currentChild().calendar[date];closeModal();renderAll();}; }
 
   function openCatalog(e){ addTarget=e.currentTarget.dataset.target; openModal('<div class="modal-head"><div><h2>Add curriculum</h2><p class="muted">Choose a preset or build one.</p></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><div class="subtabs"><button class="subtab active" data-view="preset">Presets</button><button class="subtab" data-view="manual">Manual</button></div><div id="catalogView"></div>',true);document.querySelector('.close-modal').onclick=closeModal;document.querySelectorAll('.subtab').forEach(function(b){b.onclick=function(){document.querySelectorAll('.subtab').forEach(function(x){x.classList.toggle('active',x===b);});if(b.dataset.view==='preset')renderCatalog();else renderManualForm(null,addTarget);};});renderCatalog(); }
-  function renderCatalog(){var v=document.getElementById('catalogView');v.innerHTML='<div class="catalog-filters"><label>Search<input id="presetSearch" type="search" placeholder="Curriculum or level"></label><label>Publisher<select id="publisherFilter"><option value="">All publishers</option>'+Array.from(new Set(PRESETS.map(function(x){return x.p;}))).map(function(p){return '<option>'+esc(p)+'</option>';}).join('')+'</select></label></div><div id="presetResults"></div><p class="source-note">Dimensions Math chapter names follow official Singapore Math product tables of contents. <a href="https://www.singaporemath.com/products/dimensions-math-textbook-ka" target="_blank" rel="noreferrer">Publisher source</a>.</p>';function draw(){var q=document.getElementById('presetSearch').value.toLowerCase(),p=document.getElementById('publisherFilter').value,arr=PRESETS.filter(function(x){return (!p||x.p===p)&&(!q||(x.n+' '+x.p).toLowerCase().indexOf(q)>-1);}),groups={};arr.forEach(function(x){(groups[x.p]||(groups[x.p]=[])).push(x);});document.getElementById('presetResults').innerHTML=Object.keys(groups).map(function(g){return '<section class="publisher"><h3>'+esc(g)+'</h3><div class="preset-grid">'+groups[g].map(function(x){return '<div class="preset"><span>'+esc(x.n)+'</span><button class="quiet-btn add-preset" data-name="'+esc(x.n)+'" data-p="'+esc(x.p)+'">Add</button></div>';}).join('')+'</div></section>';}).join('')||'<div class="empty">No matches.</div>';document.querySelectorAll('.add-preset').forEach(function(b){b.onclick=function(){var pr=PRESETS.find(function(x){return x.n===b.dataset.name&&x.p===b.dataset.p;});addPreset(pr);};});}document.getElementById('presetSearch').oninput=draw;document.getElementById('publisherFilter').onchange=draw;draw();}
-  function addPreset(p){var chapters=(p.chapters||['Course']).map(function(n){return {name:n,lessons:[]};});currentChild()[addTarget].push({id:uid(),name:p.n,publisher:p.p,chapters:chapters});closeModal();renderAll();toast('Curriculum added');}
-  function renderManualForm(course,listName){ var v=document.getElementById('catalogView')||document.getElementById('genericModal'); var chapters=course?course.chapters.map(function(ch){return {name:ch.name,lessons:ch.lessons.map(function(l){return {name:l.name,done:l.done};})};}):[{name:'',lessons:[]}]; v.innerHTML=(v.id==='genericModal'?'<div class="modal-head"><div><h2>Edit curriculum</h2></div><button class="icon-btn close-modal" aria-label="Close">×</button></div>':'')+'<div class="field-grid"><label>Name<input id="manualName" value="'+esc(course?course.name:'')+'"></label><label>Publisher<input id="manualPublisher" value="'+esc(course?course.publisher:'')+'"></label></div><div class="section-bar"><h2>Chapters</h2><button class="quiet-btn" id="addChapter">Add chapter</button></div><div id="chapterEditors"></div><details class="panel" style="margin-top:14px"><summary><strong>Bulk paste</strong></summary><p class="muted" style="margin-top:12px">One chapter per block. First line is the chapter name; following lines are lesson names. Separate blocks with a blank line.</p><textarea id="bulkText" placeholder="Numbers to 10\nLesson 1\nLesson 2\n\nAddition\nLesson 1"></textarea><button class="quiet-btn" id="applyBulk" style="margin-top:8px">Use pasted outline</button></details><div class="modal-actions"><button class="primary-btn" id="saveManual">'+(course?'Save changes':'Add curriculum')+'</button></div>';
+  function presetTotal(p){return (p.chapters||[]).reduce(function(n,ch){return n+(ch.count||0);},0);}
+  function renderCatalog(){var v=document.getElementById('catalogView');v.innerHTML='<div class="catalog-filters"><label>Search<input id="presetSearch" type="search" placeholder="Curriculum or level"></label><label>Publisher<select id="publisherFilter"><option value="">All publishers</option>'+Array.from(new Set(PRESETS.map(function(x){return x.p;}))).map(function(p){return '<option>'+esc(p)+'</option>';}).join('')+'</select></label></div><div id="presetResults"></div><p class="source-note">Presets marked “estimate” use editable chapter groupings, minutes, and pacing; publisher sequence or counts are retained where available. Dimensions Math chapter names follow the <a href="https://www.singaporemath.com/products/dimensions-math-textbook-ka" target="_blank" rel="noreferrer">publisher table of contents</a>.</p>';function draw(){var q=document.getElementById('presetSearch').value.toLowerCase(),p=document.getElementById('publisherFilter').value,arr=PRESETS.filter(function(x){return (!p||x.p===p)&&(!q||(x.n+' '+x.p).toLowerCase().indexOf(q)>-1);}),groups={};arr.forEach(function(x){(groups[x.p]||(groups[x.p]=[])).push(x);});document.getElementById('presetResults').innerHTML=Object.keys(groups).map(function(g){return '<section class="publisher"><h3>'+esc(g)+'</h3><div class="preset-grid">'+groups[g].map(function(x){return '<div class="preset"><div><strong>'+esc(x.n)+'</strong><div class="preset-meta"><span>'+x.chapters.length+' chapters</span><span>'+presetTotal(x)+' lessons</span><span>'+x.minutes+' min/lesson</span><span>'+x.pace+'/week'+(x.estimate?' · estimate':'')+'</span></div></div><button class="quiet-btn add-preset" data-name="'+esc(x.n)+'" data-p="'+esc(x.p)+'">Add</button></div>';}).join('')+'</div></section>';}).join('')||'<div class="empty">No matches.</div>';document.querySelectorAll('.add-preset').forEach(function(b){b.onclick=function(){var pr=PRESETS.find(function(x){return x.n===b.dataset.name&&x.p===b.dataset.p;});addPreset(pr);};});}document.getElementById('presetSearch').oninput=draw;document.getElementById('publisherFilter').onchange=draw;draw();}
+  function addPreset(p){var chapters=p.chapters.map(function(ch){var lessons=[];for(var i=0;i<ch.count;i++){var label;if(ch.prefix==='Review ')label='Review '+String.fromCharCode(65+i);else if(ch.name.indexOf('Units')===0)label='Unit '+(ch.start+i);else if(ch.name.indexOf('Steps')===0)label='Step '+(ch.start+i);else label='Lesson '+(ch.start+i);lessons.push({name:label,done:false});}return {name:ch.name,lessons:lessons};});currentChild()[addTarget].push({id:uid(),name:p.n,publisher:p.p,minutes:p.minutes,pace:p.pace,estimate:p.estimate,chapters:chapters});closeModal();renderAll();toast('Curriculum added');}
+  function renderManualForm(course,listName){ var v=document.getElementById('catalogView')||document.getElementById('genericModal'); var chapters=course?course.chapters.map(function(ch){return {name:ch.name,lessons:ch.lessons.map(function(l){return {name:l.name,done:l.done};})};}):[{name:'',lessons:[]}]; v.innerHTML=(v.id==='genericModal'?'<div class="modal-head"><div><h2>Edit curriculum</h2></div><button class="icon-btn close-modal" aria-label="Close">×</button></div>':'')+'<div class="field-grid"><label>Name<input id="manualName" value="'+esc(course?course.name:'')+'"></label><label>Publisher<input id="manualPublisher" value="'+esc(course?course.publisher:'')+'"></label><label>Minutes per lesson<input id="manualMinutes" type="number" min="1" value="'+(course&&course.minutes?course.minutes:30)+'"></label><label>Suggested lessons per week<input id="manualPace" type="number" min="1" value="'+(course&&course.pace?course.pace:4)+'"></label></div><div class="section-bar"><h2>Chapters</h2><button class="quiet-btn" id="addChapter">Add chapter</button></div><div id="chapterEditors"></div><details class="panel" style="margin-top:14px"><summary><strong>Bulk paste</strong></summary><p class="muted" style="margin-top:12px">One chapter per block. First line is the chapter name; following lines are lesson names. Separate blocks with a blank line.</p><textarea id="bulkText" placeholder="Numbers to 10\nLesson 1\nLesson 2\n\nAddition\nLesson 1"></textarea><button class="quiet-btn" id="applyBulk" style="margin-top:8px">Use pasted outline</button></details><div class="modal-actions"><button class="primary-btn" id="saveManual">'+(course?'Save changes':'Add curriculum')+'</button></div>';
     function drawEditors(){document.getElementById('chapterEditors').innerHTML=chapters.map(function(ch,i){return '<div class="chapter-editor" data-i="'+i+'"><div class="field-grid"><label>Chapter name<input class="ce-name" value="'+esc(ch.name)+'"></label><label>Named lessons<textarea class="ce-lessons" placeholder="One lesson per line">'+esc(ch.lessons.map(function(l){return l.name;}).join('\n'))+'</textarea></label></div><button class="danger-btn remove-chapter" data-i="'+i+'">Remove chapter</button></div>';}).join('');document.querySelectorAll('.remove-chapter').forEach(function(b){b.onclick=function(){syncEditors();chapters.splice(+b.dataset.i,1);drawEditors();};});}
     function syncEditors(){document.querySelectorAll('.chapter-editor').forEach(function(row){var i=+row.dataset.i,old=chapters[i]||{lessons:[]};var doneByName={};old.lessons.forEach(function(l){doneByName[l.name]=l.done;});chapters[i]={name:row.querySelector('.ce-name').value.trim(),lessons:row.querySelector('.ce-lessons').value.split(/\n/).map(function(x){return x.trim();}).filter(Boolean).map(function(n){return {name:n,done:!!doneByName[n]};})};});}
-    drawEditors();document.getElementById('addChapter').onclick=function(){syncEditors();chapters.push({name:'',lessons:[]});drawEditors();};document.getElementById('applyBulk').onclick=function(){var blocks=document.getElementById('bulkText').value.trim().split(/\n\s*\n/).filter(Boolean);if(!blocks.length){toast('Paste an outline first');return;}chapters=blocks.map(function(block){var lines=block.split(/\n/).map(function(x){return x.trim();}).filter(Boolean);return {name:lines.shift()||'Chapter',lessons:lines.map(function(n){return {name:n,done:false};})};});drawEditors();};document.getElementById('saveManual').onclick=function(){syncEditors();var name=document.getElementById('manualName').value.trim();if(!name){toast('Add a curriculum name');return;}chapters=chapters.filter(function(ch){return ch.name;});if(course){course.name=name;course.publisher=document.getElementById('manualPublisher').value.trim();course.chapters=chapters;}else{currentChild()[listName].push({id:uid(),name:name,publisher:document.getElementById('manualPublisher').value.trim(),chapters:chapters});}closeModal();renderAll();toast(course?'Changes saved':'Curriculum added');};var cl=document.querySelector('.close-modal');if(cl)cl.onclick=closeModal;
+    drawEditors();document.getElementById('addChapter').onclick=function(){syncEditors();chapters.push({name:'',lessons:[]});drawEditors();};document.getElementById('applyBulk').onclick=function(){var blocks=document.getElementById('bulkText').value.trim().split(/\n\s*\n/).filter(Boolean);if(!blocks.length){toast('Paste an outline first');return;}chapters=blocks.map(function(block){var lines=block.split(/\n/).map(function(x){return x.trim();}).filter(Boolean);return {name:lines.shift()||'Chapter',lessons:lines.map(function(n){return {name:n,done:false};})};});drawEditors();};document.getElementById('saveManual').onclick=function(){syncEditors();var name=document.getElementById('manualName').value.trim();if(!name){toast('Add a curriculum name');return;}chapters=chapters.filter(function(ch){return ch.name;});var minutes=Math.max(1,+document.getElementById('manualMinutes').value||30),pace=Math.max(1,+document.getElementById('manualPace').value||4);if(course){course.name=name;course.publisher=document.getElementById('manualPublisher').value.trim();course.minutes=minutes;course.pace=pace;course.estimate=false;course.chapters=chapters;}else{currentChild()[listName].push({id:uid(),name:name,publisher:document.getElementById('manualPublisher').value.trim(),minutes:minutes,pace:pace,estimate:false,chapters:chapters});}closeModal();renderAll();toast(course?'Changes saved':'Curriculum added');};var cl=document.querySelector('.close-modal');if(cl)cl.onclick=closeModal;
   }
   function openManual(course,listName){openModal('<div id="manualHost"></div>',true);document.getElementById('genericModal').innerHTML='';renderManualForm(course,listName);}
   function openQuickLesson(course,ci,listName){openModal('<div class="modal-head"><div><h2>Add lesson</h2><p class="muted">'+esc(course.chapters[ci].name)+'</p></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><label>Lesson name<input id="quickLesson"></label><div class="modal-actions"><button class="primary-btn" id="saveLesson">Add</button></div>');document.querySelector('.close-modal').onclick=closeModal;document.getElementById('saveLesson').onclick=function(){var n=document.getElementById('quickLesson').value.trim();if(!n)return;course.chapters[ci].lessons.push({name:n,done:false});closeModal();renderAll();}; }
