@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>hs project</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f5f7f4;
+      --paper: #ffffff;
+      --ink: #17211d;
+      --muted: #5d6a64;
+      --line: #d7ded9;
+      --soft: #eaf0ec;
+      --accent: #256b50;
+      --accent-ink: #ffffff;
+      --danger: #a23834;
+      --shadow: 0 12px 36px rgba(31, 49, 40, .11);
+      --r-sm: 8px;
+      --r: 14px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121815;
+        --paper: #1b2420;
+        --ink: #f1f5f2;
+        --muted: #b4c0ba;
+        --line: #36433d;
+        --soft: #26322d;
+        --accent: #6bc39a;
+        --accent-ink: #102119;
+        --danger: #f08b85;
+        --shadow: 0 14px 38px rgba(0,0,0,.28);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { min-width: 0; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Atkinson Hyperlegible", sans-serif; font-size: 16px; line-height: 1.45; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--accent); }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 22px clamp(14px, 3vw, 34px) 64px; }
+    .topline { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .student-switch { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; overflow: hidden; font-weight: 700; flex: 0 0 auto; }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .student-select { border: 0; background: transparent; font-size: 1.14rem; font-weight: 700; max-width: 210px; padding: 5px 26px 5px 2px; }
+    .top-actions { display: flex; gap: 8px; }
+    .icon-btn, .quiet-btn, .primary-btn, .danger-btn { min-height: 42px; border-radius: var(--r-sm); border: 1px solid var(--line); padding: 9px 13px; background: var(--paper); font-weight: 700; }
+    .icon-btn { width: 42px; padding: 9px; display: grid; place-items: center; }
+    .primary-btn { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .danger-btn { color: var(--danger); }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 34%, transparent); outline-offset: 2px; }
+    button:disabled { opacity: .48; cursor: not-allowed; }
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 28px; overflow-x: auto; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { white-space: nowrap; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); padding: 12px 13px 10px; font-weight: 700; }
+    .tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-head { display: flex; justify-content: space-between; gap: 18px; align-items: end; margin-bottom: 22px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(1.75rem, 5vw, 3rem); line-height: 1.03; letter-spacing: -.035em; margin-bottom: 7px; }
+    h2 { font-size: 1.28rem; margin-bottom: 12px; }
+    h3 { font-size: 1.04rem; margin-bottom: 5px; }
+    .muted { color: var(--muted); }
+    .mono { font-family: "DM Mono", monospace; font-size: .84rem; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .span-8 { grid-column: span 8; }
+    .span-4 { grid-column: span 4; }
+    .span-12 { grid-column: 1 / -1; }
+    .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: clamp(16px, 3vw, 24px); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); border-radius: var(--r); overflow: hidden; }
+    .stat { background: var(--paper); padding: 17px; }
+    .stat strong { display: block; font-family: "DM Mono", monospace; font-size: 1.45rem; }
+    .section-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 26px 0 12px; }
+    .section-bar h2 { margin: 0; }
+    .curriculum-list { display: grid; gap: 12px; }
+    .course { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+    .course-head { width: 100%; border: 0; background: transparent; text-align: left; padding: 17px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
+    .course-meta { display: flex; flex-wrap: wrap; gap: 7px 12px; color: var(--muted); font-size: .9rem; }
+    .progress-track { height: 6px; background: var(--soft); border-radius: 10px; margin-top: 10px; overflow: hidden; }
+    .progress-track span { display: block; height: 100%; background: var(--accent); }
+    .course-body { border-top: 1px solid var(--line); padding: 8px 17px 17px; }
+    .chapter { border-bottom: 1px solid var(--line); padding: 13px 0; }
+    .chapter:last-child { border-bottom: 0; }
+    .chapter-name { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-weight: 700; }
+    .lesson-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 7px; margin-top: 10px; }
+    .check { display: flex; align-items: center; gap: 9px; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; background: var(--bg); }
+    .check input { width: 18px; height: 18px; accent-color: var(--accent); }
+    .empty { border: 1px dashed var(--line); border-radius: var(--r); padding: 28px; color: var(--muted); text-align: center; }
+    .schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .day-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
+    .day-card textarea { min-height: 116px; }
+    label { display: grid; gap: 6px; font-weight: 700; }
+    input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper); padding: 10px 11px; }
+    textarea { resize: vertical; min-height: 90px; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .field-grid .full { grid-column: 1 / -1; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 1px solid var(--line); border-radius: var(--r-sm); padding: 11px 12px; }
+    .toggle-row label { display: block; }
+    .toggle { width: 46px; height: 26px; appearance: none; border: 0; border-radius: 20px; background: var(--line); padding: 3px; transition: background .15s; flex: 0 0 auto; }
+    .toggle::before { content: ""; display: block; width: 20px; height: 20px; background: var(--paper); border-radius: 50%; transition: transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.22); }
+    .toggle:checked { background: var(--accent); }
+    .toggle:checked::before { transform: translateX(20px); }
+    .calendar-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 7px 13px; margin: 13px 0 20px; }
+    .legend span { display: flex; align-items: center; gap: 6px; font-size: .84rem; color: var(--muted); }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .year-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .month { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 13px; }
+    .month h3 { margin-bottom: 10px; }
+    .weekdays, .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+    .weekdays span { text-align: center; font-family: "DM Mono", monospace; font-size: .66rem; color: var(--muted); }
+    .day { aspect-ratio: 1; border: 0; border-radius: 5px; background: transparent; padding: 0; font-size: .76rem; position: relative; }
+    .day:hover { background: var(--soft); }
+    .day.has-mark { color: #14201a; font-weight: 700; }
+    .day.has-mark::after { content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: currentColor; right: 3px; bottom: 3px; opacity: .65; }
+    .day.blank { pointer-events: none; }
+    .record-list { display: grid; gap: 10px; }
+    .record { display: grid; grid-template-columns: 110px 1fr auto; align-items: center; gap: 14px; border-bottom: 1px solid var(--line); padding: 11px 0; }
+    .modal-wrap { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 18px; background: rgba(9, 17, 13, .62); }
+    .modal-wrap.open { display: flex; }
+    .modal { width: min(740px, 100%); max-height: min(90vh, 850px); overflow: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 30px); }
+    .modal.wide { width: min(980px, 100%); }
+    .modal-head { display: flex; justify-content: space-between; gap: 14px; align-items: start; margin-bottom: 20px; }
+    .modal-head h2 { font-size: 1.55rem; margin-bottom: 3px; }
+    .modal-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
+    .wizard-progress { display: flex; gap: 6px; margin-bottom: 26px; }
+    .wizard-progress span { height: 5px; flex: 1; border-radius: 5px; background: var(--line); }
+    .wizard-progress span.on { background: var(--accent); }
+    .child-editor { border: 1px solid var(--line); border-radius: var(--r); padding: 14px; margin-bottom: 11px; }
+    .child-editor-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .catalog-filters { display: grid; grid-template-columns: 1fr 220px; gap: 10px; margin-bottom: 15px; }
+    .publisher { margin-top: 22px; }
+    .publisher h3 { border-bottom: 1px solid var(--line); padding-bottom: 7px; }
+    .preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .preset { border: 1px solid var(--line); border-radius: var(--r-sm); padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .preset button { min-height: 36px; }
+    .subtabs { display: flex; gap: 8px; margin: 4px 0 18px; }
+    .subtab { border: 1px solid var(--line); background: var(--paper); border-radius: 99px; padding: 8px 13px; font-weight: 700; }
+    .subtab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .chapter-editor { border: 1px solid var(--line); border-radius: var(--r); padding: 13px; margin: 10px 0; }
+    .tab-config-row { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .toast { position: fixed; left: 50%; bottom: 24px; z-index: 80; transform: translate(-50%, 20px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; opacity: 0; pointer-events: none; transition: .2s; box-shadow: var(--shadow); }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .notice { background: var(--soft); border-radius: var(--r-sm); padding: 11px 13px; color: var(--muted); }
+    .source-note { margin-top: 30px; font-size: .8rem; color: var(--muted); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 850px) {
+      .span-8, .span-4 { grid-column: 1 / -1; }
+      .year-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .page-head { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 590px) {
+      .shell { padding-top: 14px; }
+      .top-actions .text-label { display: none; }
+      .tabs { margin-left: -14px; margin-right: -14px; padding: 0 10px; }
+      .tab { padding-inline: 10px; }
+      .stat-row { grid-template-columns: 1fr; }
+      .field-grid, .catalog-filters, .preset-grid { grid-template-columns: 1fr; }
+      .year-grid { grid-template-columns: 1fr; }
+      .record { grid-template-columns: 1fr auto; }
+      .record .date { grid-column: 1 / -1; }
+      .calendar-toolbar { align-items: stretch; flex-direction: column; }
+      .modal-wrap { padding: 0; align-items: end; }
+      .modal { border-radius: 18px 18px 0 0; max-height: 94vh; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell" id="app" hidden>
+    <div class="topline">
+      <div class="student-switch">
+        <div class="avatar" id="avatar"></div>
+        <label class="sr-only" for="studentSelect">Child</label>
+        <select id="studentSelect" class="student-select"></select>
+      </div>
+      <div class="top-actions">
+        <button class="quiet-btn" id="tabsBtn"><span class="text-label">Tabs</span><span aria-hidden="true"> ≡</span></button>
+        <button class="icon-btn" id="profileBtn" aria-label="Edit child profile" title="Edit child profile">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.86 2.86-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.55v-.09A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.86-2.86.06-.06A1.7 1.7 0 0 0 4.1 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H2V9.55h.4A1.7 1.7 0 0 0 4.1 8a1.7 1.7 0 0 0-.34-1.88l-.06-.06L6.56 3.2l.06.06A1.7 1.7 0 0 0 8.5 3.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V2h4.05v.4A1.7 1.7 0 0 0 15.5 4a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.86 2.86-.06.06A1.7 1.7 0 0 0 19.9 8c.36.6.97.97 1.67 1H22v4.05h-.4A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Tracker sections"></nav>
+    <section class="page" id="page-current"></section>
+    <section class="page" id="page-schedule"></section>
+    <section class="page" id="page-planning"></section>
+    <section class="page" id="page-records"></section>
+    <section class="page" id="page-calendar"></section>
+  </main>
+
+  <div class="modal-wrap open" id="wizardWrap" role="dialog" aria-modal="true" aria-labelledby="wizardTitle">
+    <div class="modal">
+      <div class="wizard-progress"><span class="on"></span><span></span></div>
+      <div id="wizardBody"></div>
+    </div>
+  </div>
+  <div class="modal-wrap" id="genericWrap" role="dialog" aria-modal="true"><div class="modal wide" id="genericModal"></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+  var COLORS = ["#256b50", "#2f64a3", "#a4512e", "#7a4d8f", "#9a6a14", "#376d73"];
+  var TAB_NAMES = {current:"Current Year", schedule:"Schedule", planning:"Planning", records:"Records", calendar:"Calendar"};
+  var LABELS = {
+    school:{name:"School", color:"#73b98f"}, vacation:{name:"Vacation", color:"#e7bd62"}, field:{name:"Field trip", color:"#69a7cf"}, free:{name:"Free day", color:"#c9d1cc"}, sick:{name:"Sick day", color:"#df8b82"}, holiday:{name:"Holiday", color:"#d59ac6"}, coop:{name:"Co-op day", color:"#8e8ac8"}, half:{name:"Half day", color:"#a7cb72"}, testing:{name:"Testing", color:"#e09a5e"}, makeup:{name:"Makeup day", color:"#5bb9b1"}
+  };
+  var SINGAPORE = {
+    PKA:["Match, Sort, and Classify","Compare Objects","Patterns","Numbers to 5 — Part 1","Numbers to 5 — Part 2","Numbers to 10 — Part 1","Numbers to 10 — Part 2"],
+    PKB:["Ordinal Numbers","Shapes and Solids","Compare Sets","Compose and Decompose","Explore Addition and Subtraction","Cumulative Review"],
+    KA:["Match, Sort, and Classify","Numbers to 5","Numbers to 10","Shapes and Solids","Compare Height, Length, Weight, and Capacity","Comparing Numbers Within 10"],
+    KB:["Numbers to 20","Number Bonds","Addition","Subtraction","Addition and Subtraction","Numbers to 100","Time","Money"],
+    "1A":["Numbers to 10","Number Bonds","Addition","Subtraction","Numbers to 20","Addition to 20","Subtraction Within 20","Shapes","Ordinal Numbers"],
+    "1B":["Length","Comparing","Numbers to 40","Addition and Subtraction Within 40","Grouping and Sharing","Fractions","Numbers to 100","Addition and Subtraction Within 100","Time","Money"],
+    "2A":["Numbers to 1,000","Addition and Subtraction — Part 1","Addition and Subtraction — Part 2","Length","Weight","Multiplication and Division","Multiplication and Division of 2, 5, and 10"],
+    "2B":["Mental Calculation","Multiplication and Division of 3 and 4","Money","Fractions","Time","Capacity","Graphs","Shapes"],
+    "3A":["Numbers to 10,000","Addition and Subtraction — Part 1","Addition and Subtraction — Part 2","Multiplication and Division","Multiplication","Division","Graphs and Tables"],
+    "3B":["Multiplying and Dividing with 6, 7, 8, and 9","Fractions — Part 1","Fractions — Part 2","Measurement","Geometry","Area and Perimeter","Time","Money"],
+    "4A":["Numbers to One Million","Addition and Subtraction","Multiples and Factors","Multiplication","Division","Fractions","Adding and Subtracting Fractions","Multiplying a Fraction and a Whole Number","Line Graphs and Line Plots"],
+    "4B":["Measurement","Area and Perimeter","Decimals","Addition and Subtraction of Decimals","Multiplication and Division of Decimals","Angles","Lines and Shapes","Properties of Cuboids"],
+    "5A":["Whole Numbers","Writing and Evaluating Expressions","Multiplication and Division","Addition and Subtraction of Fractions","Multiplication of Fractions","Division of Fractions","Measurement","Volume of Solid Figures"],
+    "5B":["Decimals","The Four Operations of Decimals","Geometry","Data Analysis and Graphs","Ratio","Rate","Percentage"]
+  };
+  var PRESETS = [
+    {p:"Logic of English", n:"Foundations A"},{p:"Logic of English", n:"Foundations B"},{p:"Logic of English", n:"Foundations C"},{p:"Logic of English", n:"Foundations D"},{p:"Logic of English", n:"Essentials"},
+    {p:"All About Learning Press", n:"All About Reading Pre-Reading"},{p:"All About Learning Press", n:"All About Reading Level 1"},{p:"All About Learning Press", n:"All About Reading Level 2"},{p:"All About Learning Press", n:"All About Reading Level 3"},{p:"All About Learning Press", n:"All About Reading Level 4"},
+    {p:"All About Learning Press", n:"All About Spelling Level 1"},{p:"All About Learning Press", n:"All About Spelling Level 2"},{p:"All About Learning Press", n:"All About Spelling Level 3"},{p:"All About Learning Press", n:"All About Spelling Level 4"},{p:"All About Learning Press", n:"All About Spelling Level 5"},{p:"All About Learning Press", n:"All About Spelling Level 6"},{p:"All About Learning Press", n:"All About Spelling Level 7"},
+    {p:"The Good and the Beautiful", n:"Language Arts K"},{p:"The Good and the Beautiful", n:"Language Arts 1"},{p:"The Good and the Beautiful", n:"Language Arts 2"},{p:"The Good and the Beautiful", n:"Language Arts 3"},{p:"The Good and the Beautiful", n:"Language Arts 4"},{p:"The Good and the Beautiful", n:"Language Arts 5"},
+    {p:"The Good and the Beautiful", n:"Math K"},{p:"The Good and the Beautiful", n:"Math 1"},{p:"The Good and the Beautiful", n:"Math 2"},{p:"The Good and the Beautiful", n:"Math 3"},{p:"The Good and the Beautiful", n:"Math 4"},{p:"The Good and the Beautiful", n:"Math 5"},{p:"The Good and the Beautiful", n:"Handwriting K"},{p:"The Good and the Beautiful", n:"Handwriting 1"},{p:"The Good and the Beautiful", n:"Handwriting 2"},{p:"The Good and the Beautiful", n:"Handwriting 3"},{p:"The Good and the Beautiful", n:"Handwriting 4"},{p:"The Good and the Beautiful", n:"Handwriting 5"},{p:"The Good and the Beautiful", n:"Handwriting 6"},{p:"The Good and the Beautiful", n:"Handwriting 7"}
+  ].concat(Object.keys(SINGAPORE).map(function(level){ return {p:"Singapore Math", n:"Dimensions Math " + level, chapters:SINGAPORE[level]}; }));
+
+  var state = null;
+  var activeChild = 0;
+  var activeTab = "current";
+  var addTarget = "current";
+  var wizardStep = 1;
+  var draftChildren = [{name:"", birthday:"", color:COLORS[0], photo:"", attendance:true, startMonth:8}];
+  var draftYear = {days:5, pattern:"public", weeks:38};
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]; }); }
+  function uid() { return Math.random().toString(36).slice(2,9) + Date.now().toString(36); }
+  function monthName(i) { return new Intl.DateTimeFormat("en",{month:"long"}).format(new Date(2024,i,1)); }
+  function toast(msg) { var t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast.timer); toast.timer=setTimeout(function(){t.classList.remove("show");},2200); }
+  function currentChild() { return state.children[activeChild]; }
+  function applyAccent() { var c=currentChild(); if(c) document.documentElement.style.setProperty("--accent", c.color); }
+  function attendanceCount(child) { return Object.keys(child.calendar || {}).filter(function(k){ var v=child.calendar[k]; return ["school","field","coop","half","testing","makeup"].indexOf(v)>-1; }).length; }
+  function completedLessons(course) { var n=0; (course.chapters||[]).forEach(function(ch){ (ch.lessons||[]).forEach(function(l){ if(l.done)n++; }); }); return n; }
+  function totalLessons(course) { var n=0; (course.chapters||[]).forEach(function(ch){ n+=(ch.lessons||[]).length; }); return n; }
+
+  function renderWizard() {
+    var body=document.getElementById("wizardBody");
+    document.querySelectorAll(".wizard-progress span").forEach(function(x,i){x.classList.toggle("on",i<wizardStep);});
+    if(wizardStep===1) {
+      body.innerHTML='<div class="modal-head"><div><h2 id="wizardTitle">Add children</h2><p class="muted">Set up each tracker.</p></div></div><div id="childDrafts"></div><button class="quiet-btn" id="addChildDraft">Add child</button><div class="modal-actions"><label class="quiet-btn" style="display:inline-flex;align-items:center;cursor:pointer">Import backup<input id="wizardImport" type="file" accept="application/json,.json" hidden></label><button class="primary-btn" id="wizardNext">Next</button></div>';
+      renderDraftChildren();
+      document.getElementById("addChildDraft").onclick=function(){ draftChildren.push({name:"",birthday:"",color:COLORS[draftChildren.length%COLORS.length],photo:"",attendance:true,startMonth:8}); renderDraftChildren(); };
+      document.getElementById("wizardNext").onclick=function(){
+        syncDrafts();
+        if(!draftChildren.length || draftChildren.some(function(c){return !c.name.trim();})) { toast("Add a name for each child"); return; }
+        wizardStep=2; renderWizard();
+      };
+      document.getElementById("wizardImport").onchange=importBackup;
+    } else {
+      body.innerHTML='<div class="modal-head"><div><h2 id="wizardTitle">School year</h2><p class="muted">Choose the base schedule.</p></div></div><div class="field-grid"><label>School days per week<select id="yearDays">'+[1,2,3,4,5,6,7].map(function(n){return '<option '+(draftYear.days===n?'selected':'')+'>'+n+'</option>';}).join('')+'</select></label><label>Year pattern<select id="yearPattern"><option value="public">Public school · about 38 weeks</option><option value="round">Year-round</option><option value="custom">Custom weeks</option></select></label><label id="weeksField">Weeks<input id="yearWeeks" type="number" min="1" max="53" value="'+draftYear.weeks+'"></label></div><div class="notice" style="margin-top:16px">School year settings can be changed later in a child profile.</div><div class="modal-actions"><button class="quiet-btn" id="wizardBack">Back</button><button class="primary-btn" id="wizardFinish">Start</button></div>';
+      document.getElementById("yearPattern").value=draftYear.pattern;
+      function toggleWeeks(){ var p=document.getElementById("yearPattern").value; document.getElementById("weeksField").style.display=p==='custom'?'grid':'none'; }
+      toggleWeeks(); document.getElementById("yearPattern").onchange=toggleWeeks;
+      document.getElementById("wizardBack").onclick=function(){ draftYear.days=+document.getElementById("yearDays").value; draftYear.pattern=document.getElementById("yearPattern").value; wizardStep=1; renderWizard(); };
+      document.getElementById("wizardFinish").onclick=finishWizard;
+    }
+  }
+  function renderDraftChildren(){
+    var el=document.getElementById("childDrafts");
+    el.innerHTML=draftChildren.map(function(c,i){return '<div class="child-editor" data-i="'+i+'"><div class="child-editor-head"><strong>Child '+(i+1)+'</strong>'+(draftChildren.length>1?'<button class="danger-btn remove-draft" data-i="'+i+'">Remove</button>':'')+'</div><div class="field-grid"><label>Name<input class="d-name" value="'+esc(c.name)+'" autocomplete="off"></label><label>Birthday<input class="d-birthday" type="date" value="'+esc(c.birthday)+'"></label><label>Colour<select class="d-color">'+COLORS.map(function(x){return '<option value="'+x+'" '+(x===c.color?'selected':'')+' style="color:'+x+'">'+x.toUpperCase()+'</option>';}).join('')+'</select></label><label>Photo<input class="d-photo" type="file" accept="image/*"></label><div class="full toggle-row"><div><strong>Track attendance</strong><div class="muted">Adds attendance counts and calendar marks.</div></div><input class="toggle d-att" type="checkbox" '+(c.attendance?'checked':'')+' aria-label="Track attendance"></div><label class="full">Attendance year starts<select class="d-month">'+Array.from({length:12},function(_,m){return '<option value="'+m+'" '+(m===c.startMonth?'selected':'')+'>'+monthName(m)+'</option>';}).join('')+'</select></label></div></div>';}).join('');
+    el.querySelectorAll(".remove-draft").forEach(function(b){b.onclick=function(){syncDrafts();draftChildren.splice(+b.dataset.i,1);renderDraftChildren();};});
+    el.querySelectorAll(".d-photo").forEach(function(inp){inp.onchange=function(){ var i=+inp.closest('.child-editor').dataset.i; var f=inp.files[0]; if(f){var r=new FileReader();r.onload=function(){draftChildren[i].photo=r.result;};r.readAsDataURL(f);} };});
+  }
+  function syncDrafts(){ document.querySelectorAll("#childDrafts .child-editor").forEach(function(row){var i=+row.dataset.i,c=draftChildren[i];c.name=row.querySelector('.d-name').value;c.birthday=row.querySelector('.d-birthday').value;c.color=row.querySelector('.d-color').value;c.attendance=row.querySelector('.d-att').checked;c.startMonth=+row.querySelector('.d-month').value;}); }
+  function finishWizard(){
+    draftYear.days=+document.getElementById("yearDays").value; draftYear.pattern=document.getElementById("yearPattern").value; draftYear.weeks=draftYear.pattern==='public'?38:(draftYear.pattern==='round'?52:Math.max(1,+document.getElementById("yearWeeks").value||1));
+    state={version:1,created:new Date().toISOString(),year:draftYear,tabs:[{id:"current",show:true},{id:"schedule",show:true},{id:"planning",show:true},{id:"records",show:true},{id:"calendar",show:true}],children:draftChildren.map(function(c){return {id:uid(),name:c.name.trim(),birthday:c.birthday,color:c.color,photo:c.photo,attendance:c.attendance,startMonth:c.startMonth,current:[],planning:[],schedule:Array.from({length:draftYear.days},function(_,i){return {name:"Day "+(i+1),notes:""};}),calendar:{}};})};
+    document.getElementById("wizardWrap").classList.remove("open"); document.getElementById("app").hidden=false; renderAll();
+  }
+
+  function renderAll(){ applyAccent(); renderTop(); renderTabs(); renderCurrent(); renderSchedule(); renderPlanning(); renderRecords(); renderCalendar(); showTab(activeTab); }
+  function renderTop(){ var c=currentChild(); var av=document.getElementById("avatar"); av.innerHTML=c.photo?'<img src="'+c.photo+'" alt="">':esc(c.name.charAt(0).toUpperCase()); var s=document.getElementById("studentSelect");s.innerHTML=state.children.map(function(x,i){return '<option value="'+i+'" '+(i===activeChild?'selected':'')+'>'+esc(x.name)+'</option>';}).join('');s.onchange=function(){activeChild=+s.value;renderAll();}; }
+  function renderTabs(){ var el=document.getElementById("tabs"); el.innerHTML=state.tabs.filter(function(t){return t.show;}).map(function(t){return '<button class="tab '+(t.id===activeTab?'active':'')+'" data-tab="'+t.id+'">'+TAB_NAMES[t.id]+'</button>';}).join(''); el.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){showTab(b.dataset.tab);};}); if(!state.tabs.some(function(t){return t.id===activeTab&&t.show;})){activeTab=state.tabs.filter(function(t){return t.show;})[0].id;}
+  }
+  function showTab(id){ activeTab=id;document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+id);});document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===id);}); }
+  function courseHTML(course, listName){ var total=totalLessons(course),done=completedLessons(course),pct=total?Math.round(done/total*100):0; return '<article class="course" data-course="'+course.id+'" data-list="'+listName+'"><button class="course-head"><div><h3>'+esc(course.name)+'</h3><div class="course-meta"><span>'+esc(course.publisher||'Custom')+'</span><span>'+done+' of '+total+' lessons</span></div><div class="progress-track"><span style="width:'+pct+'%"></span></div></div><span aria-hidden="true">＋</span></button><div class="course-body" hidden>'+((course.chapters||[]).length?course.chapters.map(function(ch,ci){return '<div class="chapter"><div class="chapter-name"><span>'+esc(ch.name)+'</span><button class="quiet-btn add-lesson" data-ci="'+ci+'">Add lesson</button></div><div class="lesson-list">'+((ch.lessons||[]).length?ch.lessons.map(function(l,li){return '<label class="check"><input type="checkbox" data-ci="'+ci+'" data-li="'+li+'" '+(l.done?'checked':'')+'><span>'+esc(l.name)+'</span></label>';}).join(''):'<span class="muted">No lessons yet.</span>')+'</div></div>';}).join(''):'<p class="muted">Add chapters and lessons to begin.</p>')+'<div class="modal-actions"><button class="quiet-btn edit-course">Edit structure</button><button class="danger-btn remove-course">Remove</button></div></div></article>'; }
+  function bindCourses(container){
+    container.querySelectorAll('.course').forEach(function(card){
+      var listName=card.dataset.list, course=currentChild()[listName].find(function(x){return x.id===card.dataset.course;});
+      card.querySelector('.course-head').onclick=function(){var b=card.querySelector('.course-body');b.hidden=!b.hidden;card.querySelector('.course-head span[aria-hidden]').textContent=b.hidden?'＋':'−';};
+      card.querySelectorAll('input[type=checkbox]').forEach(function(chk){chk.onchange=function(){course.chapters[+chk.dataset.ci].lessons[+chk.dataset.li].done=chk.checked;renderAll();};});
+      card.querySelectorAll('.add-lesson').forEach(function(b){b.onclick=function(){openQuickLesson(course,+b.dataset.ci,listName);};});
+      card.querySelector('.edit-course').onclick=function(){openManual(course,listName);};
+      card.querySelector('.remove-course').onclick=function(){currentChild()[listName]=currentChild()[listName].filter(function(x){return x.id!==course.id;});renderAll();toast('Removed');};
+    });
+  }
+  function renderCurrent(){ var c=currentChild(), totalCourses=c.current.length, completed=c.current.filter(function(x){var t=totalLessons(x);return t>0&&completedLessons(x)===t;}).length; var el=document.getElementById('page-current'); el.innerHTML='<div class="page-head"><div><h1>'+esc(c.name)+'’s Tracker</h1><p class="muted">Current curriculum and progress.</p></div><button class="primary-btn add-curriculum" data-target="current">Add curriculum</button></div><div class="stat-row"><div class="stat"><span class="muted">Curriculum</span><strong>'+totalCourses+'</strong></div><div class="stat"><span class="muted">Completed</span><strong>'+completed+'</strong></div><div class="stat"><span class="muted">Attendance days</span><strong>'+(c.attendance?attendanceCount(c):'—')+'</strong></div></div><div class="section-bar"><h2>Current year</h2></div><div class="curriculum-list">'+(c.current.length?c.current.map(function(x){return courseHTML(x,'current');}).join(''):'<div class="empty">No curriculum added.</div>')+'</div>'; bindCourses(el); el.querySelector('.add-curriculum').onclick=openCatalog;
+  }
+  function renderPlanning(){ var c=currentChild(),el=document.getElementById('page-planning');el.innerHTML='<div class="page-head"><div><h1>Planning</h1><p class="muted">Future curriculum and course outlines.</p></div><button class="primary-btn add-curriculum" data-target="planning">Add curriculum</button></div><div class="curriculum-list">'+(c.planning.length?c.planning.map(function(x){return courseHTML(x,'planning');}).join(''):'<div class="empty">No planned curriculum.</div>')+'</div>';bindCourses(el);el.querySelector('.add-curriculum').onclick=openCatalog; }
+  function renderSchedule(){ var c=currentChild(),el=document.getElementById('page-schedule');el.innerHTML='<div class="page-head"><div><h1>Schedule</h1><p class="muted">'+state.year.days+' days · '+state.year.weeks+' weeks</p></div></div><div class="schedule-grid">'+c.schedule.map(function(d,i){return '<div class="day-card"><label>Day name<input data-i="'+i+'" class="day-name" value="'+esc(d.name)+'"></label><label style="margin-top:11px">Plan<textarea data-i="'+i+'" class="day-notes" placeholder="Subjects, lesson pace, or time blocks">'+esc(d.notes)+'</textarea></label></div>';}).join('')+'</div>';el.querySelectorAll('.day-name').forEach(function(x){x.oninput=function(){c.schedule[+x.dataset.i].name=x.value;};});el.querySelectorAll('.day-notes').forEach(function(x){x.oninput=function(){c.schedule[+x.dataset.i].notes=x.value;};}); }
+  function renderRecords(){ var c=currentChild(), completed=[];c.current.concat(c.planning).forEach(function(x){var t=totalLessons(x);if(t&&completedLessons(x)===t)completed.push(x);});var marks=Object.keys(c.calendar).sort();var el=document.getElementById('page-records');el.innerHTML='<div class="page-head"><div><h1>Records</h1><p class="muted">History and backup.</p></div></div><div class="grid"><div class="panel span-8"><h2>Attendance</h2>'+(c.attendance?'<div class="stat"><span class="muted">Days counted</span><strong>'+attendanceCount(c)+'</strong></div><div class="record-list">'+(marks.length?marks.slice(-12).reverse().map(function(date){return '<div class="record"><span class="date mono">'+date+'</span><strong>'+esc(LABELS[c.calendar[date]].name)+'</strong><span class="dot" style="background:'+LABELS[c.calendar[date]].color+'"></span></div>';}).join(''):'<p class="muted">No calendar records.</p>')+'</div>':'<p class="muted">Attendance tracking is off for this child.</p>')+'</div><div class="panel span-4"><h2>Backup</h2><p class="muted">Download after making changes. Import the file to continue later.</p><button class="primary-btn" id="exportBtn" style="width:100%">Download backup</button><label class="quiet-btn" style="display:flex;justify-content:center;margin-top:9px;cursor:pointer">Import backup<input id="importBtn" type="file" accept="application/json,.json" hidden></label></div><div class="panel span-12"><h2>Completed curriculum</h2>'+(completed.length?completed.map(function(x){return '<div class="record"><span class="date mono">Complete</span><strong>'+esc(x.name)+'</strong><span>'+totalLessons(x)+' lessons</span></div>';}).join(''):'<p class="muted">No completed curriculum.</p>')+'</div></div>';document.getElementById('exportBtn').onclick=exportBackup;document.getElementById('importBtn').onchange=importBackup; }
+  function renderCalendar(){ var c=currentChild(), el=document.getElementById('page-calendar'); var startYear=(new Date()).getFullYear();var months=[];for(var i=0;i<12;i++){var m=(c.startMonth+i)%12,y=startYear+(c.startMonth+i>=12?1:0);months.push({m:m,y:y});} el.innerHTML='<div class="page-head"><div><h1>Calendar</h1><p class="muted">'+monthName(c.startMonth)+' '+startYear+' – '+monthName((c.startMonth+11)%12)+' '+(c.startMonth===0?startYear:startYear+1)+'</p></div>'+(c.attendance?'<button class="quiet-btn" id="markSchoolBtn">Mark school day</button>':'')+'</div><div class="legend">'+Object.keys(LABELS).map(function(k){return '<span><i class="dot" style="background:'+LABELS[k].color+'"></i>'+LABELS[k].name+'</span>';}).join('')+'</div><div class="year-grid">'+months.map(monthHTML).join('')+'</div>'; el.querySelectorAll('.day[data-date]').forEach(function(b){b.onclick=function(){openDayLabel(b.dataset.date);};});var ms=document.getElementById('markSchoolBtn');if(ms)ms.onclick=function(){toast('Select a date, then choose School');}; }
+  function monthHTML(x){ var c=currentChild(),first=new Date(x.y,x.m,1).getDay(),count=new Date(x.y,x.m+1,0).getDate(),cells='';for(var i=0;i<first;i++)cells+='<span class="day blank"></span>';for(var d=1;d<=count;d++){var key=x.y+'-'+String(x.m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),mark=c.calendar[key],style=mark?'background:'+LABELS[mark].color+';':'';cells+='<button class="day '+(mark?'has-mark':'')+'" data-date="'+key+'" style="'+style+'" title="'+(mark?LABELS[mark].name:'Unmarked')+'">'+d+'</button>';}return '<section class="month"><h3>'+monthName(x.m)+' <span class="muted mono">'+x.y+'</span></h3><div class="weekdays"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="days">'+cells+'</div></section>'; }
+
+  function openModal(html,wide){var w=document.getElementById('genericWrap'),m=document.getElementById('genericModal');m.classList.toggle('wide',!!wide);m.innerHTML=html;w.classList.add('open');}
+  function closeModal(){document.getElementById('genericWrap').classList.remove('open');}
+  function openDayLabel(date){openModal('<div class="modal-head"><div><h2>'+date+'</h2><p class="muted">Choose a label.</p></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><div class="preset-grid">'+Object.keys(LABELS).map(function(k){return '<button class="preset day-label" data-label="'+k+'"><span><i class="dot" style="display:inline-block;background:'+LABELS[k].color+';margin-right:8px"></i>'+LABELS[k].name+'</span></button>';}).join('')+'</div><div class="modal-actions"><button class="danger-btn" id="clearDay">Clear</button></div>');document.querySelector('.close-modal').onclick=closeModal;document.querySelectorAll('.day-label').forEach(function(b){b.onclick=function(){currentChild().calendar[date]=b.dataset.label;closeModal();renderAll();};});document.getElementById('clearDay').onclick=function(){delete currentChild().calendar[date];closeModal();renderAll();}; }
+
+  function openCatalog(e){ addTarget=e.currentTarget.dataset.target; openModal('<div class="modal-head"><div><h2>Add curriculum</h2><p class="muted">Choose a preset or build one.</p></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><div class="subtabs"><button class="subtab active" data-view="preset">Presets</button><button class="subtab" data-view="manual">Manual</button></div><div id="catalogView"></div>',true);document.querySelector('.close-modal').onclick=closeModal;document.querySelectorAll('.subtab').forEach(function(b){b.onclick=function(){document.querySelectorAll('.subtab').forEach(function(x){x.classList.toggle('active',x===b);});if(b.dataset.view==='preset')renderCatalog();else renderManualForm(null,addTarget);};});renderCatalog(); }
+  function renderCatalog(){var v=document.getElementById('catalogView');v.innerHTML='<div class="catalog-filters"><label>Search<input id="presetSearch" type="search" placeholder="Curriculum or level"></label><label>Publisher<select id="publisherFilter"><option value="">All publishers</option>'+Array.from(new Set(PRESETS.map(function(x){return x.p;}))).map(function(p){return '<option>'+esc(p)+'</option>';}).join('')+'</select></label></div><div id="presetResults"></div><p class="source-note">Dimensions Math chapter names follow official Singapore Math product tables of contents. <a href="https://www.singaporemath.com/products/dimensions-math-textbook-ka" target="_blank" rel="noreferrer">Publisher source</a>.</p>';function draw(){var q=document.getElementById('presetSearch').value.toLowerCase(),p=document.getElementById('publisherFilter').value,arr=PRESETS.filter(function(x){return (!p||x.p===p)&&(!q||(x.n+' '+x.p).toLowerCase().indexOf(q)>-1);}),groups={};arr.forEach(function(x){(groups[x.p]||(groups[x.p]=[])).push(x);});document.getElementById('presetResults').innerHTML=Object.keys(groups).map(function(g){return '<section class="publisher"><h3>'+esc(g)+'</h3><div class="preset-grid">'+groups[g].map(function(x){return '<div class="preset"><span>'+esc(x.n)+'</span><button class="quiet-btn add-preset" data-name="'+esc(x.n)+'" data-p="'+esc(x.p)+'">Add</button></div>';}).join('')+'</div></section>';}).join('')||'<div class="empty">No matches.</div>';document.querySelectorAll('.add-preset').forEach(function(b){b.onclick=function(){var pr=PRESETS.find(function(x){return x.n===b.dataset.name&&x.p===b.dataset.p;});addPreset(pr);};});}document.getElementById('presetSearch').oninput=draw;document.getElementById('publisherFilter').onchange=draw;draw();}
+  function addPreset(p){var chapters=(p.chapters||['Course']).map(function(n){return {name:n,lessons:[]};});currentChild()[addTarget].push({id:uid(),name:p.n,publisher:p.p,chapters:chapters});closeModal();renderAll();toast('Curriculum added');}
+  function renderManualForm(course,listName){ var v=document.getElementById('catalogView')||document.getElementById('genericModal'); var chapters=course?course.chapters.map(function(ch){return {name:ch.name,lessons:ch.lessons.map(function(l){return {name:l.name,done:l.done};})};}):[{name:'',lessons:[]}]; v.innerHTML=(v.id==='genericModal'?'<div class="modal-head"><div><h2>Edit curriculum</h2></div><button class="icon-btn close-modal" aria-label="Close">×</button></div>':'')+'<div class="field-grid"><label>Name<input id="manualName" value="'+esc(course?course.name:'')+'"></label><label>Publisher<input id="manualPublisher" value="'+esc(course?course.publisher:'')+'"></label></div><div class="section-bar"><h2>Chapters</h2><button class="quiet-btn" id="addChapter">Add chapter</button></div><div id="chapterEditors"></div><details class="panel" style="margin-top:14px"><summary><strong>Bulk paste</strong></summary><p class="muted" style="margin-top:12px">One chapter per block. First line is the chapter name; following lines are lesson names. Separate blocks with a blank line.</p><textarea id="bulkText" placeholder="Numbers to 10\nLesson 1\nLesson 2\n\nAddition\nLesson 1"></textarea><button class="quiet-btn" id="applyBulk" style="margin-top:8px">Use pasted outline</button></details><div class="modal-actions"><button class="primary-btn" id="saveManual">'+(course?'Save changes':'Add curriculum')+'</button></div>';
+    function drawEditors(){document.getElementById('chapterEditors').innerHTML=chapters.map(function(ch,i){return '<div class="chapter-editor" data-i="'+i+'"><div class="field-grid"><label>Chapter name<input class="ce-name" value="'+esc(ch.name)+'"></label><label>Named lessons<textarea class="ce-lessons" placeholder="One lesson per line">'+esc(ch.lessons.map(function(l){return l.name;}).join('\n'))+'</textarea></label></div><button class="danger-btn remove-chapter" data-i="'+i+'">Remove chapter</button></div>';}).join('');document.querySelectorAll('.remove-chapter').forEach(function(b){b.onclick=function(){syncEditors();chapters.splice(+b.dataset.i,1);drawEditors();};});}
+    function syncEditors(){document.querySelectorAll('.chapter-editor').forEach(function(row){var i=+row.dataset.i,old=chapters[i]||{lessons:[]};var doneByName={};old.lessons.forEach(function(l){doneByName[l.name]=l.done;});chapters[i]={name:row.querySelector('.ce-name').value.trim(),lessons:row.querySelector('.ce-lessons').value.split(/\n/).map(function(x){return x.trim();}).filter(Boolean).map(function(n){return {name:n,done:!!doneByName[n]};})};});}
+    drawEditors();document.getElementById('addChapter').onclick=function(){syncEditors();chapters.push({name:'',lessons:[]});drawEditors();};document.getElementById('applyBulk').onclick=function(){var blocks=document.getElementById('bulkText').value.trim().split(/\n\s*\n/).filter(Boolean);if(!blocks.length){toast('Paste an outline first');return;}chapters=blocks.map(function(block){var lines=block.split(/\n/).map(function(x){return x.trim();}).filter(Boolean);return {name:lines.shift()||'Chapter',lessons:lines.map(function(n){return {name:n,done:false};})};});drawEditors();};document.getElementById('saveManual').onclick=function(){syncEditors();var name=document.getElementById('manualName').value.trim();if(!name){toast('Add a curriculum name');return;}chapters=chapters.filter(function(ch){return ch.name;});if(course){course.name=name;course.publisher=document.getElementById('manualPublisher').value.trim();course.chapters=chapters;}else{currentChild()[listName].push({id:uid(),name:name,publisher:document.getElementById('manualPublisher').value.trim(),chapters:chapters});}closeModal();renderAll();toast(course?'Changes saved':'Curriculum added');};var cl=document.querySelector('.close-modal');if(cl)cl.onclick=closeModal;
+  }
+  function openManual(course,listName){openModal('<div id="manualHost"></div>',true);document.getElementById('genericModal').innerHTML='';renderManualForm(course,listName);}
+  function openQuickLesson(course,ci,listName){openModal('<div class="modal-head"><div><h2>Add lesson</h2><p class="muted">'+esc(course.chapters[ci].name)+'</p></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><label>Lesson name<input id="quickLesson"></label><div class="modal-actions"><button class="primary-btn" id="saveLesson">Add</button></div>');document.querySelector('.close-modal').onclick=closeModal;document.getElementById('saveLesson').onclick=function(){var n=document.getElementById('quickLesson').value.trim();if(!n)return;course.chapters[ci].lessons.push({name:n,done:false});closeModal();renderAll();}; }
+
+  function openProfile(){var c=currentChild();openModal('<div class="modal-head"><div><h2>Child profile</h2></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><div class="field-grid"><label>Name<input id="profileName" value="'+esc(c.name)+'"></label><label>Birthday<input id="profileBirthday" type="date" value="'+esc(c.birthday)+'"></label><label>Colour<select id="profileColor">'+COLORS.map(function(x){return '<option value="'+x+'" '+(x===c.color?'selected':'')+'>'+x.toUpperCase()+'</option>';}).join('')+'</select></label><label>Photo<input id="profilePhoto" type="file" accept="image/*"></label><div class="toggle-row full"><div><strong>Track attendance</strong></div><input class="toggle" id="profileAttendance" type="checkbox" '+(c.attendance?'checked':'')+'></div><label>Attendance year starts<select id="profileMonth">'+Array.from({length:12},function(_,m){return '<option value="'+m+'" '+(m===c.startMonth?'selected':'')+'>'+monthName(m)+'</option>';}).join('')+'</select></label><label>School days per week<select id="profileDays">'+[1,2,3,4,5,6,7].map(function(n){return '<option '+(state.year.days===n?'selected':'')+'>'+n+'</option>';}).join('')+'</select></label><label>Schedule type<select id="profilePattern"><option value="public">Public school</option><option value="round">Year-round</option><option value="custom">Custom</option></select></label><label>Weeks<input id="profileWeeks" type="number" min="1" max="53" value="'+state.year.weeks+'"></label></div><div class="modal-actions"><button class="primary-btn" id="saveProfile">Save</button></div>');document.querySelector('.close-modal').onclick=closeModal;document.getElementById('profilePattern').value=state.year.pattern;var photo=c.photo;document.getElementById('profilePhoto').onchange=function(e){var f=e.target.files[0];if(f){var r=new FileReader();r.onload=function(){photo=r.result;};r.readAsDataURL(f);}};document.getElementById('saveProfile').onclick=function(){var newDays=+document.getElementById('profileDays').value;c.name=document.getElementById('profileName').value.trim()||c.name;c.birthday=document.getElementById('profileBirthday').value;c.color=document.getElementById('profileColor').value;c.photo=photo;c.attendance=document.getElementById('profileAttendance').checked;c.startMonth=+document.getElementById('profileMonth').value;state.year.pattern=document.getElementById('profilePattern').value;state.year.weeks=Math.max(1,+document.getElementById('profileWeeks').value||1);if(newDays!==state.year.days){state.year.days=newDays;state.children.forEach(function(ch){while(ch.schedule.length<newDays)ch.schedule.push({name:'Day '+(ch.schedule.length+1),notes:''});ch.schedule=ch.schedule.slice(0,newDays);});}closeModal();renderAll();toast('Profile saved');};}
+  function openTabs(){openModal('<div class="modal-head"><div><h2>Tabs</h2><p class="muted">Change order or visibility.</p></div><button class="icon-btn close-modal" aria-label="Close">×</button></div><div id="tabConfig">'+state.tabs.map(function(t,i){return '<div class="tab-config-row" data-i="'+i+'"><strong>'+TAB_NAMES[t.id]+'</strong><button class="icon-btn up" aria-label="Move '+TAB_NAMES[t.id]+' up">↑</button><button class="icon-btn down" aria-label="Move '+TAB_NAMES[t.id]+' down">↓</button><input class="toggle show-tab" type="checkbox" '+(t.show?'checked':'')+' aria-label="Show '+TAB_NAMES[t.id]+'"></div>';}).join('')+'</div><div class="modal-actions"><button class="primary-btn" id="saveTabs">Done</button></div>');document.querySelector('.close-modal').onclick=closeModal;function reOpen(){closeModal();openTabs();}document.querySelectorAll('.up').forEach(function(b){b.onclick=function(){var i=+b.closest('.tab-config-row').dataset.i;if(i>0){var x=state.tabs.splice(i,1)[0];state.tabs.splice(i-1,0,x);reOpen();}};});document.querySelectorAll('.down').forEach(function(b){b.onclick=function(){var i=+b.closest('.tab-config-row').dataset.i;if(i<state.tabs.length-1){var x=state.tabs.splice(i,1)[0];state.tabs.splice(i+1,0,x);reOpen();}};});document.getElementById('saveTabs').onclick=function(){document.querySelectorAll('.tab-config-row').forEach(function(row){state.tabs[+row.dataset.i].show=row.querySelector('.show-tab').checked;});if(!state.tabs.some(function(t){return t.show;})){toast('Keep at least one tab visible');return;}closeModal();renderAll();};}
+  function exportBackup(){var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='hs-project-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},500);toast('Backup downloaded');}
+  function importBackup(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var data=JSON.parse(r.result);if(!data||!Array.isArray(data.children)||!data.children.length||!Array.isArray(data.tabs))throw new Error('bad');state=data;activeChild=0;activeTab=state.tabs.find(function(t){return t.show;}).id;document.getElementById('wizardWrap').classList.remove('open');document.getElementById('app').hidden=false;closeModal();renderAll();toast('Backup imported');}catch(err){toast('That backup file is not valid');}};r.readAsText(f);}
+
+  document.getElementById('profileBtn').onclick=openProfile;
+  document.getElementById('tabsBtn').onclick=openTabs;
+  document.getElementById('genericWrap').addEventListener('click',function(e){if(e.target===e.currentTarget)closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+  renderWizard();
+})();
+</script>
+</body>
+</html>
